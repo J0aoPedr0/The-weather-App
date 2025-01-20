@@ -42,9 +42,11 @@ fun CardWeather(label: String, value: String, icon: ImageVector) {
             .padding(8.dp),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top) {
+
             Row(verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start) {
-                Icon(imageVector = icon, contentDescription = null,
+                Icon(imageVector = icon, contentDescription =
+                null,
                     Modifier.size(24.dp))
                 Spacer(Modifier.width(6.dp))
                 Text(text = label,

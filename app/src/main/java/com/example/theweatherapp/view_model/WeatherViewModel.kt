@@ -7,7 +7,7 @@ import com.example.theweatherapp.service_interface_and_retrofit_instance.Weather
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class WeatherViewModel : ViewModel() {
+class WeatherViewModel: ViewModel() {
 
     private val _weatherData = MutableStateFlow<WeatherResponse?>(value = null)
     var weatherData: MutableStateFlow<WeatherResponse?> = _weatherData
