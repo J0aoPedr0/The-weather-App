@@ -15,6 +15,7 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        splashScreen
         enableEdgeToEdge()
         setContent {
             val viewModel = viewModel<WeatherViewModel>()

@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.TheWeatherApp" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.MySplashScreen.Light.NoActionBar" parent = "Theme.MySplashScreen.Light.NoActionBar" tools:ignore="ResourceCycle">
+        <item name="android:windowSplashScreenBackground" tools:targetApi="s">@color/Brow</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@drawable/weather_icon2</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.TheWeatherApp.Light.NoActionBar" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
 </resources>

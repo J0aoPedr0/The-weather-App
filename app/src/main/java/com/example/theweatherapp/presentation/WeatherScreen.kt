@@ -1,6 +1,5 @@
 package com.example.theweatherapp.presentation
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +19,7 @@ import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -53,9 +53,9 @@ import com.example.theweatherapp.view_model.WeatherViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeatherScreen(viewModel: WeatherViewModel) {
-    val context = LocalContext.current
     val weatherData by viewModel.weatherData.collectAsState()
-    var city by remember { mutableStateOf(value = "") }
+    var city by remember { mutableStateOf("") }
+    var showError by remember { mutableStateOf(false) }
     val apiKey = "52f6a1b6489a878343b670e1be7174e5"
 
     Box(
@@ -66,7 +66,6 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
                 contentScale = ContentScale.FillBounds
             )
     ) {
-
         Text(
             text = "Weather App",
             style = TextStyle(
@@ -76,7 +75,6 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
                 color = Pink40
             ),
             modifier = Modifier
-                .fillMaxSize()
                 .fillMaxWidth()
                 .padding(start = 24.dp, top = 66.dp)
         )
@@ -89,80 +87,88 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
             verticalArrangement = Arrangement.Top
         ) {
             Spacer(Modifier.height(180.dp))
+
             OutlinedTextField(
                 value = city,
-                onValueChange = { newValue -> city = newValue },
+                onValueChange = {
+                    city = it
+                    showError = it.isBlank()
+                },
                 Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 50.dp),
-                label = {
-                    Text(
-                        text = "Enter city:",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                },
+                    .padding(bottom = 16.dp),
+                label = { Text(text = "Enter city:", fontSize = 20.sp, fontWeight = FontWeight.Bold) },
                 placeholder = { Text(text = "City name") },
+                isError = showError,
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     containerColor = Color.White,
                     focusedPlaceholderColor = Purple40,
                     focusedLabelColor = Purple40,
                     focusedBorderColor = Purple40,
+                    errorBorderColor = MaterialTheme.colorScheme.error
                 ),
                 shape = RoundedCornerShape(24.dp),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
+            )
 
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done
-                ),
+            if (showError) {
+                Text(text = "Please incert a city name",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+            }
 
-                )
             Button(
                 onClick = {
-                    viewModel.fetchWeather(city, apiKey)
-                    if (city.isEmpty()) {
-                        Toast.makeText(context,"Please, insert a City", Toast.LENGTH_SHORT).show()
+                    if (city.isBlank()) {
+                        showError = true
+                    } else {
+                        showError = false
+                        viewModel.fetchWeather(city, apiKey)
                     }
                 },
+                Modifier.padding(top = 16.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Pink40,
                     contentColor = Color.White
                 )
             ) {
-                Text(
-                    text = "Get Weather", style = TextStyle(
-                        fontSize = 16.sp,
-                    )
-                )
+                Text(text = "Get Weather", style = TextStyle(fontSize = 16.sp))
             }
+
             Spacer(Modifier.height(18.dp))
 
-            weatherData?.let {
-                Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    CardWeather(
-                        label = "City", value = it.name,
-                        icon = Icons.Default.Place)
-                    CardWeather(
-                        label = "Temperature", value = "${it.main.temp} ºC",
-                        icon = Icons.Default.Star
-                    )
-                }
-                Spacer(Modifier.height(6.dp))
-
-                Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Absolute.SpaceEvenly
-                ) {
-                    CardWeather(
-                        label = "Humidity", value = "${it.main.humidity}%",
-                        icon = Icons.Default.Warning
-                    )
-                    CardWeather(
-                        label = "Description", value = it.weather[0].description,
-                        icon = Icons.Default.Info
-                    )
+            weatherData?.let { weather ->
+                Column {
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        CardWeather(
+                            label = "City", value = weather.name,
+                            icon = Icons.Default.Place
+                        )
+                        CardWeather(
+                            label = "Temperature", value = "${weather.main.temp} ºC",
+                            icon = Icons.Default.Star
+                        )
+                    }
+                    Spacer(Modifier.height(6.dp))
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        CardWeather(
+                            label = "Humidity", value = "${weather.main.humidity}%",
+                            icon = Icons.Default.Warning
+                        )
+                        CardWeather(
+                            label = "Description", value = weather.weather[0].description,
+                            icon = Icons.Default.Info
+                        )
+                    }
                 }
             }
         }
