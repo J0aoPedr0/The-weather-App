@@ -76,6 +76,6 @@ fun CardWeather(label: String, value: String, icon: ImageVector) {
 @Preview
 @Composable
 private fun CardWeatherPreview() {
-    CardWeather("Cu de cachorro", "10",
+    CardWeather("Tempo teste", "10",
         ImageVector.vectorResource(id = R.drawable.ic_launcher_foreground))
 }

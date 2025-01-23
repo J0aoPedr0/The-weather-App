@@ -15,7 +15,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Thermostat
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -107,6 +109,7 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
                     focusedBorderColor = Purple40,
                     errorBorderColor = MaterialTheme.colorScheme.error
                 ),
+                maxLines = 2,
                 shape = RoundedCornerShape(24.dp),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
             )
@@ -152,7 +155,7 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
                         )
                         CardWeather(
                             label = "Temperature", value = "${weather.main.temp} ºC",
-                            icon = Icons.Default.Star
+                            icon = Icons.Default.Thermostat
                         )
                     }
                     Spacer(Modifier.height(6.dp))
@@ -162,7 +165,7 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
                     ) {
                         CardWeather(
                             label = "Humidity", value = "${weather.main.humidity}%",
-                            icon = Icons.Default.Warning
+                            icon = Icons.Default.WaterDrop
                         )
                         CardWeather(
                             label = "Description", value = weather.weather[0].description,
